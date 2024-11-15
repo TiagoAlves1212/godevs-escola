@@ -31,14 +31,110 @@
         <div class="card-body">
           <h2 class="card-title">Usuários</h2>
           <p>Gerenciar os usuários do sistema.</p>
-          <a href="#usuarios" class="btn btn-primary">Ver Usuários</a>
+          <a href="usuarios.html" class="btn btn-primary">Ver Usuários</a>
         </div>
       </div>
       <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-200">
         <div class="card-body">
           <h2 class="card-title">Segurança</h2>
           <p>Configurações de segurança do sistema.</p>
-          <a href="#seguranca" class="btn btn-primary">Ajustes de Segurança</a>
+          <a href="seguranca.html" class="btn btn-primary">Ajustes de Segurança</a>
         </div>
       </div>
-      <!-- Adicione mais opções de configurações
+    </div>
+
+    <!-- Formulário de Configurações Gerais -->
+    <section class="mt-8">
+      <h2 class="text-xl mb-4">Configurações Gerais</h2>
+      <form id="config-form" class="bg-base-100 p-6 rounded-lg shadow-md">
+        <div class="mb-4">
+          <label for="admin-name" class="block text-sm mb-2">Nome do Administrador</label>
+          <input type="text" id="admin-name" class="input input-bordered w-full" placeholder="Digite seu nome">
+        </div>
+        <div class="mb-4">
+          <label for="max-faltas" class="block text-sm mb-2">Máximo de Faltas</label>
+          <input type="number" id="max-faltas" min="0" class="input input-bordered w-full"
+            placeholder="Digite o limite">
+        </div>
+        <button type="submit" class="btn btn-primary w-full">Salvar Configurações</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    const themeToggleButton = document.getElementById('theme-toggle');
+    const moonIcon = document.getElementById('moon-icon');
+    const body = document.body;
+
+    // Alternar tema (claro/escuro)
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+      body.classList.remove('bg-gray-900', 'text-white');
+      body.classList.add('bg-white', 'text-gray-900');
+      moonIcon.setAttribute('name', 'sunny-outline');
+    }
+
+    themeToggleButton.addEventListener('click', () => {
+      const isLight = body.classList.contains('bg-white');
+
+      if (isLight) {
+        body.classList.remove('bg-white', 'text-gray-900');
+        body.classList.add('bg-gray-900', 'text-white');
+        moonIcon.setAttribute('name', 'moon-outline');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('bg-gray-900', 'text-white');
+        body.classList.add('bg-white', 'text-gray-900');
+        moonIcon.setAttribute('name', 'sunny-outline');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    // Validação e envio do formulário
+    const configForm = document.getElementById('config-form');
+    configForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const adminName = document.getElementById('admin-name').value.trim();
+      const maxFaltas = document.getElementById('max-faltas').value;
+
+      if (!adminName) {
+        alert('O nome do administrador é obrigatório.');
+        return;
+      }
+
+      if (!maxFaltas || maxFaltas <= 0) {
+        alert('O máximo de faltas deve ser maior que zero.');
+        return;
+      }
+
+      const configData = { adminName, maxFaltas: parseInt(maxFaltas, 10) };
+
+      // Exemplo de envio para uma API (ajustar URL conforme necessário)
+      fetch('https://api.exemplo.com/configuracoes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(configData),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error('Erro ao salvar configurações');
+          return response.json();
+        })
+        .then((data) => {
+          alert('Configurações salvas com sucesso!');
+          console.log('Configurações:', data);
+        })
+        .catch((error) => {
+          console.error('Erro:', error);
+          alert('Falha ao salvar as configurações.');
+        });
+    });
+  </script>
+</body>
+
+</html>

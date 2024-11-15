@@ -87,16 +87,10 @@
     const moonIcon = document.getElementById('moon-icon');
     const body = document.body;
 
-    const currentTheme = localStorage.getItem('theme');
-    if (currentTheme === 'light') {
-      body.classList.remove('bg-gray-900', 'text-white');
-      body.classList.add('bg-white', 'text-gray-900');
-      moonIcon.setAttribute('name', 'sunny-outline');
-    }
+    const API_BASE_URL = 'https://api.exemplo.com';
 
-    themeToggleButton.addEventListener('click', () => {
+    const toggleTheme = () => {
       const isLight = body.classList.contains('bg-white');
-
       if (isLight) {
         body.classList.remove('bg-white', 'text-gray-900');
         body.classList.add('bg-gray-900', 'text-white');
@@ -108,20 +102,62 @@
         moonIcon.setAttribute('name', 'sunny-outline');
         localStorage.setItem('theme', 'light');
       }
-    });
+    };
 
-    // Lógica de notificação (faltas)
-    const faltasAluno = 3; // Exemplo, substitua pela lógica real de faltas
+    const checkNotification = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/notificacoes`);
+        if (!response.ok) throw new Error('Erro ao buscar notificações');
 
-    const notificationCount = document.getElementById('notification-count');
+        const data = await response.json();
+        const notificationCount = document.getElementById('notification-count');
+        if (data.hasNotification) {
+          notificationCount.classList.remove('hidden');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-    if (faltasAluno > 2) {
-      notificationCount.classList.remove('hidden'); // Exibe a notificação
-    }
+    const fetchTurmas = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/turmas`);
+        if (!response.ok) throw new Error('Erro ao buscar turmas');
+        const turmas = await response.json();
+        console.log('Turmas:', turmas);
+      } catch (error) {
+        console.error('Erro ao obter turmas:', error);
+      }
+    };
 
-    // Quando clicar no ícone de notificação
-    document.getElementById('bell-icon').addEventListener('click', () => {
-      alert('Você tem faltas acumuladas no sistema!');
+    const saveConfig = async (config) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/configuracoes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(config),
+        });
+        if (!response.ok) throw new Error('Erro ao salvar configurações');
+        const data = await response.json();
+        alert('Configurações salvas com sucesso!');
+      } catch (error) {
+        console.error(error);
+        alert('Falha ao salvar as configurações.');
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentTheme = localStorage.getItem('theme');
+      if (currentTheme === 'light') toggleTheme();
+
+      checkNotification();
+      fetchTurmas();
+
+      themeToggleButton.addEventListener('click', toggleTheme);
+
+      document.getElementById('bell-icon').addEventListener('click', () => {
+        alert('Você tem notificações pendentes!');
+      });
     });
   </script>
 </body>

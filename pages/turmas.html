@@ -26,30 +26,29 @@
 
   <main class="p-8">
     <h1 class="text-2xl mb-4">Gerenciar Turmas</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-200">
-        <div class="card-body">
-          <h2 class="card-title">Turma A</h2>
-          <p>Detalhes e alunos desta turma.</p>
-          <a href="#turmaA" class="btn btn-primary">Ver Turma</a>
-        </div>
-      </div>
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-200">
-        <div class="card-body">
-          <h2 class="card-title">Turma B</h2>
-          <p>Detalhes e alunos desta turma.</p>
-          <a href="#turmaB" class="btn btn-primary">Ver Turma</a>
-        </div>
-      </div>
-      <!-- Adicione mais turmas conforme necessário -->
+
+    <!-- Formulário de Nova Turma -->
+    <form id="turma-form" class="mb-8 flex gap-4">
+      <input type="text" id="nome-turma" placeholder="Nome da Turma" class="input input-bordered flex-1" required>
+      <button type="submit" class="btn btn-primary">Adicionar Turma</button>
+    </form>
+
+    <!-- Lista de Turmas -->
+    <div id="turmas-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Cards de Turmas serão inseridos dinamicamente aqui -->
     </div>
   </main>
 
   <script>
+    const API_BASE_URL = "https://api.exemplo.com"; // Substitua pela sua URL
     const themeToggleButton = document.getElementById('theme-toggle');
     const moonIcon = document.getElementById('moon-icon');
     const body = document.body;
+    const turmasContainer = document.getElementById('turmas-container');
+    const turmaForm = document.getElementById('turma-form');
+    const nomeTurmaInput = document.getElementById('nome-turma');
 
+    // Persistência de Tema
     const currentTheme = localStorage.getItem('theme');
     if (currentTheme === 'light') {
       body.classList.remove('bg-gray-900', 'text-white');
@@ -72,6 +71,113 @@
         localStorage.setItem('theme', 'light');
       }
     });
+
+    // Função para carregar turmas
+    async function carregarTurmas() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/turmas`);
+        if (!response.ok) throw new Error("Erro ao carregar turmas");
+        const turmas = await response.json();
+        renderizarTurmas(turmas);
+      } catch (error) {
+        alert(`Erro: ${error.message}`);
+      }
+    }
+
+    // Renderizar lista de turmas
+    function renderizarTurmas(turmas) {
+      turmasContainer.innerHTML = "";
+      turmas.forEach((turma) => {
+        const turmaCard = document.createElement("div");
+        turmaCard.className = "card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-200";
+        turmaCard.innerHTML = `
+          <div class="card-body">
+            <h2 class="card-title">${turma.nome}</h2>
+            <p>ID: ${turma.id}</p>
+            <div class="mt-4 flex gap-2">
+              <button class="btn btn-success atualizar-turma" data-id="${turma.id}">Atualizar</button>
+              <button class="btn btn-error excluir-turma" data-id="${turma.id}">Excluir</button>
+            </div>
+          </div>
+        `;
+        turmasContainer.appendChild(turmaCard);
+      });
+
+      // Vincular eventos de atualização e exclusão
+      document.querySelectorAll(".atualizar-turma").forEach((button) => {
+        button.addEventListener("click", () => atualizarTurma(button.dataset.id));
+      });
+
+      document.querySelectorAll(".excluir-turma").forEach((button) => {
+        button.addEventListener("click", () => excluirTurma(button.dataset.id));
+      });
+    }
+
+    // Adicionar turma
+    turmaForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const nome = nomeTurmaInput.value.trim();
+
+      if (!nome) {
+        alert("O nome da turma é obrigatório");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/turmas`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nome }),
+        });
+
+        if (!response.ok) throw new Error("Erro ao adicionar turma");
+        alert("Turma adicionada com sucesso!");
+        nomeTurmaInput.value = "";
+        carregarTurmas();
+      } catch (error) {
+        alert(`Erro: ${error.message}`);
+      }
+    });
+
+    // Atualizar turma
+    async function atualizarTurma(id) {
+      const novoNome = prompt("Digite o novo nome da turma:");
+      if (!novoNome) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/turmas/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nome: novoNome }),
+        });
+
+        if (!response.ok) throw new Error("Erro ao atualizar turma");
+        alert("Turma atualizada com sucesso!");
+        carregarTurmas();
+      } catch (error) {
+        alert(`Erro: ${error.message}`);
+      }
+    }
+
+    // Excluir turma
+    async function excluirTurma(id) {
+      if (!confirm("Tem certeza que deseja excluir esta turma?")) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/turmas/${id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) throw new Error("Erro ao excluir turma");
+        alert("Turma excluída com sucesso!");
+        carregarTurmas();
+      } catch (error) {
+        alert(`Erro: ${error.message}`);
+      }
+    }
+
+    // Carregar turmas ao carregar a página
+    carregarTurmas();
   </script>
 </body>
 

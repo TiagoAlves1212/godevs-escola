@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dist/output.css">
+  <title>Usuários - Admin Panel</title>
+</head>
+
+<body class="bg-gray-900 text-white transition-all duration-300">
+
+  <main>
+    <div class="flex">
+      <!-- Sidebar -->
+      <div class="w-64 bg-base-200 min-h-screen">
+        <div class="flex items-center p-4 text-center text-2xl">
+          <span>Usuários</span>
+        </div>
+        <ul>
+          <li><a href="index.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300">Início</a>
+          </li>
+          <li><a href="seguranca.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300">Segurança</a>
+          </li>
+          <li><a href="configuracoes.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300">Configurações</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 p-8">
+        <h1 class="text-xl mb-4">Gerenciamento de Usuários</h1>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="card bg-base-100 shadow-xl p-6">
+            <h2 class="card-title">Adicionar Usuário</h2>
+            <p>Crie novos usuários para o sistema.</p>
+            <button id="add-user" class="btn btn-primary mt-4 hover:bg-blue-500">Adicionar</button>
+          </div>
+
+          <div class="card bg-base-100 shadow-xl p-6">
+            <h2 class="card-title">Lista de Usuários</h2>
+            <p>Visualize e gerencie todos os usuários cadastrados.</p>
+            <button id="list-users" class="btn btn-primary mt-4 hover:bg-blue-500">Ver Lista</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE_URL = "https://api.exemplo.com"; // Substitua pela sua URL
+
+    // Adicionar usuário
+    document.getElementById("add-user").addEventListener("click", async () => {
+      const username = prompt("Digite o nome do usuário:");
+      if (!username) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/users`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username })
+        });
+
+        if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+        alert("Usuário adicionado com sucesso!");
+      } catch (error) {
+        alert(`Falha ao adicionar usuário: ${error.message}`);
+      }
+    });
+
+    // Listar usuários
+    document.getElementById("list-users").addEventListener("click", async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/users`, { method: "GET" });
+        if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+
+        const users = await response.json();
+        console.log("Usuários cadastrados:", users);
+        alert("Usuários carregados com sucesso! Veja no console.");
+      } catch (error) {
+        alert(`Erro ao carregar usuários: ${error.message}`);
+      }
+    });
+
+    // Editar usuário
+    async function editUser(userId) {
+      const newUsername = prompt("Digite o novo nome do usuário:");
+      if (!newUsername) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: newUsername })
+        });
+
+        if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+        alert("Usuário atualizado com sucesso!");
+      } catch (error) {
+        alert(`Erro ao atualizar usuário: ${error.message}`);
+      }
+    }
+
+    // Deletar usuário
+    async function deleteUser(userId) {
+      const confirmDelete = confirm("Tem certeza de que deseja excluir este usuário?");
+      if (!confirmDelete) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/users/${userId}`, { method: "DELETE" });
+        if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+
+        alert("Usuário deletado com sucesso!");
+      } catch (error) {
+        alert(`Erro ao excluir usuário: ${error.message}`);
+      }
+    }
+
+    // Simular ações de edição e exclusão (exemplo para desenvolvimento)
+    // Substituir `1` pelo `id` do usuário ao integrar com a API
+    console.log("Para testar:");
+    console.log("Editar Usuário: `editUser(1)`");
+    console.log("Excluir Usuário: `deleteUser(1)`");
+  </script>
+</body>
+
+</html>

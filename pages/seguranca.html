@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dist/output.css">
+  <title>Segurança - Admin Panel</title>
+</head>
+
+<body class="bg-gray-900 text-white transition-all duration-300">
+
+  <main>
+    <div class="flex">
+      <!-- Sidebar -->
+      <div class="w-64 bg-base-200 min-h-screen">
+        <div class="flex items-center p-4 text-center text-2xl">
+          <span>Segurança</span>
+        </div>
+        <ul>
+          <li><a href="index.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300">Início</a>
+          </li>
+          <li><a href="usuarios.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300">Usuários</a>
+          </li>
+          <li><a href="configuracoes.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300">Configurações</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 p-8">
+        <h1 class="text-xl mb-4">Configurações de Segurança</h1>
+
+        <div class="card bg-base-100 shadow-xl p-6">
+          <h2 class="card-title">Autenticação</h2>
+          <p>Configure opções de autenticação, como autenticação de dois fatores.</p>
+          <button id="setup-auth" class="btn btn-primary mt-4 hover:bg-blue-500">Configurar</button>
+        </div>
+
+        <div class="card bg-base-100 shadow-xl p-6 mt-6">
+          <h2 class="card-title">Permissões</h2>
+          <p>Gerencie permissões de acesso para diferentes usuários.</p>
+          <button id="manage-permissions" class="btn btn-primary mt-4 hover:bg-blue-500">Gerenciar Permissões</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE_URL = "https://api.exemplo.com"; // Substitua pela sua URL
+
+    // Configurar autenticação
+    document.getElementById("setup-auth").addEventListener("click", async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/security/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ enable2FA: true })
+        });
+
+        if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+        alert("Autenticação configurada com sucesso!");
+      } catch (error) {
+        alert(`Falha ao configurar autenticação: ${error.message}`);
+      }
+    });
+
+    // Gerenciar permissões
+    document.getElementById("manage-permissions").addEventListener("click", async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/permissions`, { method: "GET" });
+        if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+
+        const permissions = await response.json();
+        console.log("Permissões carregadas:", permissions);
+        alert("Permissões carregadas com sucesso! Veja no console.");
+      } catch (error) {
+        alert(`Erro ao carregar permissões: ${error.message}`);
+      }
+    });
+  </script>
+</body>
+
+</html>
