@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dist/output.css">
+  <title>Dashboard - Admin Panel</title>
+</head>
+
+<body class="bg-gray-900 text-white transition-all duration-300">
+
+  <main>
+    <div class="flex">
+      <!-- Sidebar -->
+      <div class="w-64 bg-base-200 min-h-screen">
+        <div class="flex items-center p-4 text-center text-2xl">
+          <!-- Botão de notificação à esquerda do título -->
+          <div id="notification" class="indicator mr-4">
+            <button class="btn btn-ghost btn-circle">
+              <ion-icon id="bell-icon" name="notifications-outline" class="h-5 w-5"></ion-icon>
+              <span id="notification-count" class="badge badge-error indicator-item hidden">!</span>
+            </button>
+          </div>
+          <span>Admin Panel</span>
+        </div>
+        <ul>
+          <li><a href="turmas.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300 btn-ghost">Turmas</a>
+          </li>
+          <li><a href="relatorios.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300 btn-ghost">Relatórios</a>
+          </li>
+          <li><a href="configuracoes.html"
+              class="block p-4 hover:bg-base-300 hover:text-black transition-colors duration-300 btn-ghost">Configurações</a>
+          </li>
+        </ul>
+        <div class="p-4 mt-auto">
+          <button id="theme-toggle"
+            class="btn btn-ghost btn-circle w-full hover:bg-base-300 transition-colors duration-300">
+            <div class="indicator">
+              <ion-icon id="moon-icon" name="moon-outline" class="h-5 w-5"></ion-icon>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 p-8">
+        <h1 class="text-xl">Bem-vindo ao Painel de Administração</h1>
+
+        <div class="grid grid-cols-3 gap-4 mt-4">
+          <div class="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div class="card-body">
+              <h2 class="card-title">Turmas</h2>
+              <p>Gerencie as turmas de alunos.</p>
+              <a href="turmas.html" class="btn btn-primary hover:bg-blue-500 transition-colors duration-300">Ver
+                Turmas</a>
+            </div>
+          </div>
+          <div class="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div class="card-body">
+              <h2 class="card-title">Relatórios</h2>
+              <p>Visualize os relatórios de presença e desempenho.</p>
+              <a href="relatorios.html" class="btn btn-primary hover:bg-blue-500 transition-colors duration-300">Ver
+                Relatórios</a>
+            </div>
+          </div>
+          <div class="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            <div class="card-body">
+              <h2 class="card-title">Configurações</h2>
+              <p>Ajustes no sistema e nas preferências do painel.</p>
+              <a href="configuracoes.html" class="btn btn-primary hover:bg-blue-500 transition-colors duration-300">Ver
+                Configurações</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    const themeToggleButton = document.getElementById('theme-toggle');
+    const moonIcon = document.getElementById('moon-icon');
+    const body = document.body;
+
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+      body.classList.remove('bg-gray-900', 'text-white');
+      body.classList.add('bg-white', 'text-gray-900');
+      moonIcon.setAttribute('name', 'sunny-outline');
+    }
+
+    themeToggleButton.addEventListener('click', () => {
+      const isLight = body.classList.contains('bg-white');
+
+      if (isLight) {
+        body.classList.remove('bg-white', 'text-gray-900');
+        body.classList.add('bg-gray-900', 'text-white');
+        moonIcon.setAttribute('name', 'moon-outline');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('bg-gray-900', 'text-white');
+        body.classList.add('bg-white', 'text-gray-900');
+        moonIcon.setAttribute('name', 'sunny-outline');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    // Lógica de notificação (faltas)
+    const faltasAluno = 3; // Exemplo, substitua pela lógica real de faltas
+
+    const notificationCount = document.getElementById('notification-count');
+
+    if (faltasAluno > 2) {
+      notificationCount.classList.remove('hidden'); // Exibe a notificação
+    }
+
+    // Quando clicar no ícone de notificação
+    document.getElementById('bell-icon').addEventListener('click', () => {
+      alert('Você tem faltas acumuladas no sistema!');
+    });
+  </script>
+</body>
+
+</html>

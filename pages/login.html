@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Login</title>
+  <link rel="stylesheet" href="../dist/output.css">
+</head>
+
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+
+  <!-- Painel de Login -->
+  <div class="card w-full max-w-sm shadow-xl bg-gray-800 text-white">
+    <div class="card-body">
+      <h2 class="text-center text-2xl font-bold mb-6">Login</h2>
+
+      <form action="index.html" method="get">
+        <div class="form-control mb-4">
+          <label class="label">
+            <span class="label-text text-gray-300">Email</span>
+          </label>
+          <input type="email" placeholder="seuemail@dominio.com"
+            class="input input-bordered bg-gray-700 text-white transition duration-200 ease-in-out focus:bg-gray-600">
+        </div>
+
+        <div class="form-control mb-6">
+          <label class="label">
+            <span class="label-text text-gray-300">Senha</span>
+          </label>
+          <input type="password" placeholder="••••••••"
+            class="input input-bordered bg-gray-700 text-white transition duration-200 ease-in-out focus:bg-gray-600">
+        </div>
+
+        <button class="btn w-full transition duration-300 ease-in-out transform hover:scale-105"
+          style="background-color: #5c27e3;" onmouseover="this.style.backgroundColor='#6e38f5';"
+          onmouseout="this.style.backgroundColor='#5c27e3';">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>

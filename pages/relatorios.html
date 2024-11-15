@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dist/output.css">
+  <title>Relatórios - Admin Panel</title>
+</head>
+
+<body class="bg-gray-900 text-white transition-all duration-300">
+  <header>
+    <div class="navbar bg-base-100">
+      <div class="navbar-start">
+        <a class="btn btn-ghost text-xl" href="index.html">Voltar</a>
+      </div>
+      <div class="navbar-end">
+        <button id="theme-toggle" class="btn btn-ghost btn-circle">
+          <div class="indicator">
+            <ion-icon id="moon-icon" name="moon-outline" class="h-5 w-5"></ion-icon>
+          </div>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="p-8">
+    <h1 class="text-2xl mb-4">Relatórios Gerados</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-200">
+        <div class="card-body">
+          <h2 class="card-title">Relatório de Presença</h2>
+          <p>Visualize o relatório de presença dos alunos.</p>
+          <a href="#presencaRelatorio" class="btn btn-primary">Ver Relatório</a>
+        </div>
+      </div>
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-200">
+        <div class="card-body">
+          <h2 class="card-title">Relatório de Notas</h2>
+          <p>Relatório de desempenho dos alunos.</p>
+          <a href="#notasRelatorio" class="btn btn-primary">Ver Relatório</a>
+        </div>
+      </div>
+      <!-- Adicione mais relatórios conforme necessário -->
+    </div>
+  </main>
+
+  <script>
+    const themeToggleButton = document.getElementById('theme-toggle');
+    const moonIcon = document.getElementById('moon-icon');
+    const body = document.body;
+
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+      body.classList.remove('bg-gray-900', 'text-white');
+      body.classList.add('bg-white', 'text-black');
+      moonIcon.setAttribute('name', 'sunny-outline');
+    }
+
+    themeToggleButton.addEventListener('click', () => {
+      const isLight = body.classList.contains('bg-white');
+
+      if (isLight) {
+        body.classList.remove('bg-white', 'text-black');
+        body.classList.add('bg-gray-900', 'text-white');
+        moonIcon.setAttribute('name', 'moon-outline');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('bg-gray-900', 'text-white');
+        body.classList.add('bg-white', 'text-black');
+        moonIcon.setAttribute('name', 'sunny-outline');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
+</body>
+
+</html>

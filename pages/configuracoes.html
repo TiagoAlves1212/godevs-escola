@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../dist/output.css">
+  <title>Configurações - Admin Panel</title>
+</head>
+
+<body class="bg-gray-900 text-white transition-all duration-300">
+  <header>
+    <div class="navbar bg-base-100">
+      <div class="navbar-start">
+        <a class="btn btn-ghost text-xl" href="index.html">Voltar</a>
+      </div>
+      <div class="navbar-end">
+        <button id="theme-toggle" class="btn btn-ghost btn-circle">
+          <div class="indicator">
+            <ion-icon id="moon-icon" name="moon-outline" class="h-5 w-5"></ion-icon>
+          </div>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="p-8">
+    <h1 class="text-2xl mb-4">Configurações do Sistema</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-200">
+        <div class="card-body">
+          <h2 class="card-title">Usuários</h2>
+          <p>Gerenciar os usuários do sistema.</p>
+          <a href="#usuarios" class="btn btn-primary">Ver Usuários</a>
+        </div>
+      </div>
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-200">
+        <div class="card-body">
+          <h2 class="card-title">Segurança</h2>
+          <p>Configurações de segurança do sistema.</p>
+          <a href="#seguranca" class="btn btn-primary">Ajustes de Segurança</a>
+        </div>
+      </div>
+      <!-- Adicione mais opções de configurações
